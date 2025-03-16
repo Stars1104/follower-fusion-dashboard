@@ -6,9 +6,6 @@ import { useAuth } from './AuthGuard';
 import { useLocation } from 'react-router-dom';
 import { Bell, User } from 'lucide-react';
 
-// Add framer-motion dependency
-<lov-add-dependency>framer-motion@10.16.4</lov-add-dependency>
-
 interface AdminLayoutProps {
   children: ReactNode;
 }
