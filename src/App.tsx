@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Orders from "./pages/Orders";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,11 @@ const App = () => (
             <Route path="/orders/:orderId" element={
               <AdminLayout>
                 <Orders />
+              </AdminLayout>
+            } />
+            <Route path="/settings" element={
+              <AdminLayout>
+                <Settings />
               </AdminLayout>
             } />
             

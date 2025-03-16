@@ -5,9 +5,34 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Instagram, Heart, Eye, MessageCircle, ArrowLeft, Calendar, Clock, DollarSign, Check, X, AlertTriangle } from 'lucide-react';
+import { 
+  Instagram, 
+  Heart, 
+  Eye, 
+  MessageCircle, 
+  ArrowLeft, 
+  Calendar, 
+  Clock, 
+  DollarSign, 
+  Check, 
+  X, 
+  AlertTriangle,
+  Loader2
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
+import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 // Mock order type definitions
 type OrderStatus = 'pending' | 'completed' | 'rejected';
@@ -34,8 +59,10 @@ export const OrderDetail = () => {
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Service type icons and colors
   const serviceDetails = {
@@ -102,6 +129,7 @@ export const OrderDetail = () => {
     if (!order) return;
     
     setIsProcessing(true);
+    setIsRejectDialogOpen(false);
     
     // Simulate API call to reject order
     setTimeout(() => {
@@ -166,48 +194,109 @@ export const OrderDetail = () => {
         <div className="flex items-center gap-2 w-full sm:w-auto">
           {order.status === 'pending' && (
             <>
-              <Button 
-                variant="destructive" 
-                className="w-full sm:w-auto"
-                onClick={handleReject}
-                disabled={isProcessing}
-              >
-                <X size={16} className="mr-2" />
-                Reject Order
-              </Button>
+              <AlertDialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
+                <AlertDialogTrigger asChild>
+                  <Button 
+                    variant="destructive" 
+                    className="w-full sm:w-auto"
+                    disabled={isProcessing}
+                  >
+                    <X size={16} className="mr-2" />
+                    Reject Order
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Reject this order?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. The customer will be notified and the order will be marked as rejected.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleReject} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      Reject Order
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              
               <Button 
                 className="w-full sm:w-auto"
                 onClick={handleApprove}
                 disabled={isProcessing}
               >
-                <Check size={16} className="mr-2" />
-                Approve Order
+                {isProcessing ? (
+                  <>
+                    <Loader2 size={16} className="mr-2 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Check size={16} className="mr-2" />
+                    Approve Order
+                  </>
+                )}
               </Button>
             </>
           )}
           
           {order.status === 'completed' && (
-            <Button 
-              variant="outline" 
-              className="w-full sm:w-auto"
-              onClick={handleReject}
-              disabled={isProcessing}
-            >
-              <X size={16} className="mr-2" />
-              Mark as Rejected
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="w-full sm:w-auto"
+                  disabled={isProcessing}
+                >
+                  <X size={16} className="mr-2" />
+                  Mark as Rejected
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Change order status to rejected?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will mark this completed order as rejected. The customer will be notified of this change.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleReject} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    Confirm
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
           
           {order.status === 'rejected' && (
-            <Button 
-              variant="outline" 
-              className="w-full sm:w-auto"
-              onClick={handleApprove}
-              disabled={isProcessing}
-            >
-              <Check size={16} className="mr-2" />
-              Mark as Completed
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="w-full sm:w-auto"
+                  disabled={isProcessing}
+                >
+                  <Check size={16} className="mr-2" />
+                  Mark as Completed
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Change order status to completed?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will mark this rejected order as completed. The customer will be notified of this change.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleApprove}>
+                    Confirm
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
         </div>
       </div>

@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -6,6 +7,7 @@ import { useAuth } from '@/components/AuthGuard';
 import { useToast } from '@/hooks/use-toast';
 import { Instagram } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,6 +15,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,13 +51,13 @@ const Login = () => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <Card className="p-8 shadow-lg border-0">
-          <div className="text-center mb-8">
-            <div className="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10">
-              <Instagram className="h-8 w-8 text-primary" />
+        <Card className="p-6 md:p-8 shadow-lg border-0">
+          <div className="text-center mb-6 md:mb-8">
+            <div className="mb-4 inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-primary/10">
+              <Instagram className="h-7 w-7 md:h-8 md:w-8 text-primary" />
             </div>
-            <h1 className="text-2xl font-semibold mb-1">Instagram Growth Admin</h1>
-            <p className="text-muted-foreground">Sign in to access your dashboard</p>
+            <h1 className="text-xl md:text-2xl font-semibold mb-1">Instagram Growth Admin</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Sign in to access your dashboard</p>
           </div>
           
           <form onSubmit={handleLogin} className="space-y-4">
@@ -69,7 +72,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-11"
+                className="h-10 md:h-11"
               />
             </div>
             
@@ -78,7 +81,7 @@ const Login = () => {
                 <label htmlFor="password" className="text-sm font-medium">
                   Password
                 </label>
-                <a href="#" className="text-sm text-primary hover:underline">
+                <a href="#" className="text-xs md:text-sm text-primary hover:underline">
                   Forgot password?
                 </a>
               </div>
@@ -89,11 +92,11 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="h-11"
+                className="h-10 md:h-11"
               />
             </div>
             
-            <Button type="submit" className="w-full h-11" disabled={isLoading}>
+            <Button type="submit" className="w-full h-10 md:h-11" disabled={isLoading}>
               {isLoading ? (
                 <span className="animate-pulse">Signing in...</span>
               ) : (
@@ -102,7 +105,7 @@ const Login = () => {
             </Button>
           </form>
           
-          <div className="mt-6 text-center text-sm text-muted-foreground">
+          <div className="mt-6 text-center text-xs md:text-sm text-muted-foreground">
             <p>For demo, use: <span className="font-medium text-foreground">admin@example.com / password or 12345678</span></p>
           </div>
         </Card>
