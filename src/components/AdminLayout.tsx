@@ -6,6 +6,7 @@ import { useAuth } from './AuthGuard';
 import { useLocation } from 'react-router-dom';
 import { Bell, User, Wallet } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { NotificationPanel } from './NotificationPanel';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -13,6 +14,7 @@ interface AdminLayoutProps {
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const { logout } = useAuth();
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Dashboard');
@@ -40,6 +42,10 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       setPageTitle('Instagram Growth Admin');
     }
   }, [location]);
+
+  const toggleNotifications = () => {
+    setIsNotificationOpen(!isNotificationOpen);
+  };
 
   return (
     <div className="min-h-screen flex w-full">
@@ -89,7 +95,11 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               <span className="text-sm font-medium">$25,000</span>
             </div>
             
-            <button className="p-2 rounded-full hover:bg-secondary transition-colors relative">
+            <button 
+              className="p-2 rounded-full hover:bg-secondary transition-colors relative"
+              onClick={toggleNotifications}
+              aria-label="Notifications"
+            >
               <Bell size={20} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full"></span>
             </button>
@@ -110,6 +120,13 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             </div>
           </div>
         </header>
+        
+        {/* Notification Panel */}
+        <AnimatePresence>
+          {isNotificationOpen && (
+            <NotificationPanel onClose={() => setIsNotificationOpen(false)} />
+          )}
+        </AnimatePresence>
         
         {/* Main content */}
         <AnimatePresence mode="wait">

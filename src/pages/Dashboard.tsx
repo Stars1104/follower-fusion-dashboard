@@ -15,6 +15,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { useBreakpoint } from '@/hooks/use-mobile';
 
 // Mock recent orders data
 const recentOrders = [
@@ -34,11 +35,13 @@ const statusVariants = {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const breakpoint = useBreakpoint();
+  const isMobile = breakpoint === 'mobile';
   
   return (
     <div className="space-y-8">
       {/* Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
         <MetricCard
           title="Total Followers"
           value="24.5K"
@@ -75,12 +78,12 @@ const Dashboard = () => {
       {/* Additional Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <AnalyticsCard title="Recent Orders" className="lg:col-span-2" delay={0.3}>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto -mx-5 px-5">
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Order ID</TableHead>
-                  <TableHead>Username</TableHead>
+                  <TableHead className={isMobile ? "hidden" : ""}>Username</TableHead>
                   <TableHead>Service</TableHead>
                   <TableHead className="text-right">Quantity</TableHead>
                   <TableHead>Status</TableHead>
@@ -94,11 +97,11 @@ const Dashboard = () => {
                     onClick={() => navigate(`/orders/${order.id}`)}
                   >
                     <TableCell className="font-medium">{order.id}</TableCell>
-                    <TableCell>@{order.username}</TableCell>
+                    <TableCell className={isMobile ? "hidden" : ""}>@{order.username}</TableCell>
                     <TableCell className="capitalize">{order.service}</TableCell>
                     <TableCell className="text-right">{order.quantity.toLocaleString()}</TableCell>
                     <TableCell>
-                      <Badge variant="outline" className={`${statusVariants[order.status as keyof typeof statusVariants]} capitalize`}>
+                      <Badge variant="outline" className={`${statusVariants[order.status as keyof typeof statusVariants]} capitalize whitespace-nowrap`}>
                         {order.status}
                       </Badge>
                     </TableCell>
@@ -164,6 +167,44 @@ const Dashboard = () => {
               Followers services account for almost half of all orders, followed by likes at 30%.
             </p>
           </Card>
+          
+          {/* Services Growth */}
+          <div className="mt-6 space-y-4">
+            <h4 className="text-sm font-medium">Monthly Growth</h4>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-3 rounded-md border">
+                <div className="text-sm text-muted-foreground">Followers</div>
+                <div className="flex items-end gap-1 mt-1">
+                  <span className="text-lg font-semibold">+12.5%</span>
+                  <span className="text-xs text-green-500 mb-0.5">↑</span>
+                </div>
+              </div>
+              
+              <div className="p-3 rounded-md border">
+                <div className="text-sm text-muted-foreground">Likes</div>
+                <div className="flex items-end gap-1 mt-1">
+                  <span className="text-lg font-semibold">+8.3%</span>
+                  <span className="text-xs text-green-500 mb-0.5">↑</span>
+                </div>
+              </div>
+              
+              <div className="p-3 rounded-md border">
+                <div className="text-sm text-muted-foreground">Views</div>
+                <div className="flex items-end gap-1 mt-1">
+                  <span className="text-lg font-semibold">+17.2%</span>
+                  <span className="text-xs text-green-500 mb-0.5">↑</span>
+                </div>
+              </div>
+              
+              <div className="p-3 rounded-md border">
+                <div className="text-sm text-muted-foreground">Comments</div>
+                <div className="flex items-end gap-1 mt-1">
+                  <span className="text-lg font-semibold">+5.8%</span>
+                  <span className="text-xs text-green-500 mb-0.5">↑</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </AnalyticsCard>
       </div>
     </div>

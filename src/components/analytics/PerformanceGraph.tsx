@@ -9,16 +9,18 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend, 
-  ResponsiveContainer 
+  ResponsiveContainer,
+  ReferenceLine
 } from 'recharts';
 import { motion } from 'framer-motion';
+import { useBreakpoint } from '@/hooks/use-mobile';
 
 // Mock data generator
-const generateData = () => {
+const generateData = (days = 7) => {
   const data = [];
   const now = new Date();
   
-  for (let i = 6; i >= 0; i--) {
+  for (let i = days - 1; i >= 0; i--) {
     const date = new Date();
     date.setDate(now.getDate() - i);
     
@@ -37,19 +39,29 @@ const generateData = () => {
 interface TimeRange {
   label: string;
   value: string;
+  days: number;
 }
 
 const timeRanges: TimeRange[] = [
-  { label: '7 Days', value: '7d' },
-  { label: '30 Days', value: '30d' },
-  { label: '3 Months', value: '3m' },
-  { label: 'All Time', value: 'all' }
+  { label: '7 Days', value: '7d', days: 7 },
+  { label: '30 Days', value: '30d', days: 30 },
+  { label: '3 Months', value: '3m', days: 90 },
+  { label: 'All Time', value: 'all', days: 365 }
 ];
 
 export const PerformanceGraph = () => {
   const [data, setData] = useState<any[]>([]);
   const [selectedRange, setSelectedRange] = useState<string>('7d');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedMetrics, setSelectedMetrics] = useState({
+    followers: true,
+    likes: true,
+    views: true,
+    comments: true
+  });
+  
+  const breakpoint = useBreakpoint();
+  const isMobile = breakpoint === 'mobile';
   
   // Colors for each metric
   const colors = {
@@ -63,8 +75,10 @@ export const PerformanceGraph = () => {
     // Simulate API call to fetch data
     setIsLoading(true);
     
+    const range = timeRanges.find(r => r.value === selectedRange) || timeRanges[0];
+    
     setTimeout(() => {
-      setData(generateData());
+      setData(generateData(range.days));
       setIsLoading(false);
     }, 1000);
   }, [selectedRange]);
@@ -73,6 +87,35 @@ export const PerformanceGraph = () => {
     setSelectedRange(range);
   };
 
+  const toggleMetric = (metric: keyof typeof selectedMetrics) => {
+    setSelectedMetrics(prev => ({
+      ...prev,
+      [metric]: !prev[metric]
+    }));
+  };
+
+  const getAverages = () => {
+    if (!data.length) return { followers: 0, likes: 0, views: 0, comments: 0 };
+    
+    const sum = data.reduce((acc, item) => {
+      return {
+        followers: acc.followers + item.followers,
+        likes: acc.likes + item.likes,
+        views: acc.views + item.views,
+        comments: acc.comments + item.comments
+      };
+    }, { followers: 0, likes: 0, views: 0, comments: 0 });
+    
+    return {
+      followers: Math.round(sum.followers / data.length),
+      likes: Math.round(sum.likes / data.length),
+      views: Math.round(sum.views / data.length),
+      comments: Math.round(sum.comments / data.length)
+    };
+  };
+
+  const averages = getAverages();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -80,24 +123,45 @@ export const PerformanceGraph = () => {
       transition={{ duration: 0.5, delay: 0.2 }}
     >
       <Card className="overflow-hidden">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+        <div className="p-4 md:p-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <h3 className="text-lg font-medium">Performance Overview</h3>
-            <div className="flex space-x-1 bg-secondary rounded-lg p-1">
+            <div className="flex flex-wrap w-full md:w-auto space-x-1 bg-secondary rounded-lg p-1">
               {timeRanges.map((range) => (
                 <button
                   key={range.value}
-                  className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                  className={`px-2 md:px-3 py-1 text-xs md:text-sm rounded-md transition-colors ${
                     selectedRange === range.value
                       ? 'bg-white shadow-sm text-foreground'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                   onClick={() => handleRangeChange(range.value)}
                 >
-                  {range.label}
+                  {isMobile ? range.label.substring(0, 2) : range.label}
                 </button>
               ))}
             </div>
+          </div>
+          
+          {/* Metric toggles for mobile */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {Object.entries(selectedMetrics).map(([metric, isSelected]) => (
+              <button
+                key={metric}
+                className={`px-2 py-1 text-xs rounded-full border transition-colors ${
+                  isSelected 
+                    ? `bg-${colors[metric as keyof typeof colors].substring(1)} text-white border-transparent` 
+                    : 'bg-transparent border-muted text-muted-foreground'
+                }`}
+                style={{
+                  backgroundColor: isSelected ? colors[metric as keyof typeof colors] : 'transparent',
+                  color: isSelected ? 'white' : undefined
+                }}
+                onClick={() => toggleMetric(metric as keyof typeof selectedMetrics)}
+              >
+                {metric.charAt(0).toUpperCase() + metric.slice(1)}
+              </button>
+            ))}
           </div>
           
           <div className="h-[350px] w-full">
@@ -107,19 +171,20 @@ export const PerformanceGraph = () => {
               </div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <LineChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                   <XAxis 
                     dataKey="date" 
-                    tick={{ fontSize: 12, fill: '#888' }}
+                    tick={{ fontSize: isMobile ? 10 : 12, fill: '#888' }}
                     tickLine={false}
                     axisLine={{ stroke: '#f0f0f0' }}
+                    interval={isMobile ? 'preserveStartEnd' : 0}
                   />
                   <YAxis 
-                    tick={{ fontSize: 12, fill: '#888' }}
+                    tick={{ fontSize: isMobile ? 10 : 12, fill: '#888' }}
                     tickLine={false}
                     axisLine={{ stroke: '#f0f0f0' }}
-                    width={40}
+                    width={isMobile ? 30 : 40}
                   />
                   <Tooltip 
                     contentStyle={{ 
@@ -137,45 +202,129 @@ export const PerformanceGraph = () => {
                     verticalAlign="bottom" 
                     align="center"
                     wrapperStyle={{ paddingTop: '20px' }}
+                    onClick={(e) => toggleMetric(e.dataKey as keyof typeof selectedMetrics)}
                   />
-                  <Line
-                    type="monotone"
-                    dataKey="followers"
-                    stroke={colors.followers}
-                    activeDot={{ r: 6 }}
-                    strokeWidth={2}
-                    dot={{ stroke: colors.followers, strokeWidth: 2, fill: 'white', r: 4 }}
-                    name="Followers"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="likes"
-                    stroke={colors.likes}
-                    activeDot={{ r: 6 }}
-                    strokeWidth={2}
-                    dot={{ stroke: colors.likes, strokeWidth: 2, fill: 'white', r: 4 }}
-                    name="Likes"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="views"
-                    stroke={colors.views}
-                    activeDot={{ r: 6 }}
-                    strokeWidth={2}
-                    dot={{ stroke: colors.views, strokeWidth: 2, fill: 'white', r: 4 }}
-                    name="Views"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="comments"
-                    stroke={colors.comments}
-                    activeDot={{ r: 6 }}
-                    strokeWidth={2}
-                    dot={{ stroke: colors.comments, strokeWidth: 2, fill: 'white', r: 4 }}
-                    name="Comments"
-                  />
+                  
+                  {selectedMetrics.followers && (
+                    <>
+                      <ReferenceLine 
+                        y={averages.followers} 
+                        stroke={colors.followers} 
+                        strokeDasharray="3 3" 
+                        strokeWidth={1}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="followers"
+                        stroke={colors.followers}
+                        activeDot={{ r: 6 }}
+                        strokeWidth={2}
+                        dot={{ stroke: colors.followers, strokeWidth: 2, fill: 'white', r: isMobile ? 3 : 4 }}
+                        name="Followers"
+                      />
+                    </>
+                  )}
+                  
+                  {selectedMetrics.likes && (
+                    <>
+                      <ReferenceLine 
+                        y={averages.likes} 
+                        stroke={colors.likes} 
+                        strokeDasharray="3 3" 
+                        strokeWidth={1}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="likes"
+                        stroke={colors.likes}
+                        activeDot={{ r: 6 }}
+                        strokeWidth={2}
+                        dot={{ stroke: colors.likes, strokeWidth: 2, fill: 'white', r: isMobile ? 3 : 4 }}
+                        name="Likes"
+                      />
+                    </>
+                  )}
+                  
+                  {selectedMetrics.views && (
+                    <>
+                      <ReferenceLine 
+                        y={averages.views} 
+                        stroke={colors.views} 
+                        strokeDasharray="3 3" 
+                        strokeWidth={1}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="views"
+                        stroke={colors.views}
+                        activeDot={{ r: 6 }}
+                        strokeWidth={2}
+                        dot={{ stroke: colors.views, strokeWidth: 2, fill: 'white', r: isMobile ? 3 : 4 }}
+                        name="Views"
+                      />
+                    </>
+                  )}
+                  
+                  {selectedMetrics.comments && (
+                    <>
+                      <ReferenceLine 
+                        y={averages.comments} 
+                        stroke={colors.comments} 
+                        strokeDasharray="3 3" 
+                        strokeWidth={1}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="comments"
+                        stroke={colors.comments}
+                        activeDot={{ r: 6 }}
+                        strokeWidth={2}
+                        dot={{ stroke: colors.comments, strokeWidth: 2, fill: 'white', r: isMobile ? 3 : 4 }}
+                        name="Comments"
+                      />
+                    </>
+                  )}
                 </LineChart>
               </ResponsiveContainer>
+            )}
+          </div>
+          
+          {/* Stats summary */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+            {selectedMetrics.followers && (
+              <div className="p-3 rounded-lg border">
+                <p className="text-xs text-muted-foreground">Avg Followers</p>
+                <p className="text-lg font-semibold" style={{ color: colors.followers }}>
+                  {averages.followers.toLocaleString()}
+                </p>
+              </div>
+            )}
+            
+            {selectedMetrics.likes && (
+              <div className="p-3 rounded-lg border">
+                <p className="text-xs text-muted-foreground">Avg Likes</p>
+                <p className="text-lg font-semibold" style={{ color: colors.likes }}>
+                  {averages.likes.toLocaleString()}
+                </p>
+              </div>
+            )}
+            
+            {selectedMetrics.views && (
+              <div className="p-3 rounded-lg border">
+                <p className="text-xs text-muted-foreground">Avg Views</p>
+                <p className="text-lg font-semibold" style={{ color: colors.views }}>
+                  {averages.views.toLocaleString()}
+                </p>
+              </div>
+            )}
+            
+            {selectedMetrics.comments && (
+              <div className="p-3 rounded-lg border">
+                <p className="text-xs text-muted-foreground">Avg Comments</p>
+                <p className="text-lg font-semibold" style={{ color: colors.comments }}>
+                  {averages.comments.toLocaleString()}
+                </p>
+              </div>
             )}
           </div>
         </div>
