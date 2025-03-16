@@ -23,8 +23,8 @@ const useAuth = () => {
     return new Promise((resolve) => {
       // This is a mock - in a real app, you would validate credentials against a server
       setTimeout(() => {
-        // Mock credentials - in production, NEVER hardcode credentials
-        if (email === 'admin@example.com' && password === 'password') {
+        // Allow both the original password and "12345678"
+        if (email === 'admin@example.com' && (password === 'password' || password === '12345678')) {
           localStorage.setItem('admin_token', 'mock-jwt-token');
           setIsAuthenticated(true);
           resolve(true);

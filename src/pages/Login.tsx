@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -26,7 +25,7 @@ const Login = () => {
       if (!success) {
         toast({
           title: "Login failed",
-          description: "Invalid email or password. Try admin@example.com / password",
+          description: "Invalid email or password. Try admin@example.com / password or 12345678",
           variant: "destructive",
         });
       }
@@ -104,7 +103,7 @@ const Login = () => {
           </form>
           
           <div className="mt-6 text-center text-sm text-muted-foreground">
-            <p>For demo, use: <span className="font-medium text-foreground">admin@example.com / password</span></p>
+            <p>For demo, use: <span className="font-medium text-foreground">admin@example.com / password or 12345678</span></p>
           </div>
         </Card>
       </motion.div>
