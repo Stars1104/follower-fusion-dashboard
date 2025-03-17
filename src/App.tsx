@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Orders from "./pages/Orders";
 import Settings from "./pages/Settings";
+import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "./components/ThemeProvider";
 
@@ -44,6 +45,11 @@ const App = () => (
               <Route path="/settings" element={
                 <AdminLayout>
                   <Settings />
+                </AdminLayout>
+              } />
+              <Route path="/pricing" element={
+                <AdminLayout>
+                  <Pricing />
                 </AdminLayout>
               } />
               
