@@ -13,6 +13,9 @@ import Settings from "./pages/Settings";
 import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "./components/ThemeProvider";
+import Users from "./pages/Users";
+import ContentEditor from "./pages/ContentEditor";
+import SupplierSettings from "./pages/SupplierSettings";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +53,21 @@ const App = () => (
               <Route path="/pricing" element={
                 <AdminLayout>
                   <Pricing />
+                </AdminLayout>
+              } />
+              <Route path="/users" element={
+                <AdminLayout>
+                  <Users />
+                </AdminLayout>
+              } />
+              <Route path="/content" element={
+                <AdminLayout>
+                  <ContentEditor />
+                </AdminLayout>
+              } />
+              <Route path="/supplier" element={
+                <AdminLayout>
+                  <SupplierSettings />
                 </AdminLayout>
               } />
               

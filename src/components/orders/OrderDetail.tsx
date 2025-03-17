@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
@@ -17,7 +16,9 @@ import {
   Check, 
   X, 
   AlertTriangle,
-  Loader2
+  Loader2,
+  Send,
+  CheckCircle
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
@@ -34,7 +35,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-// Mock order type definitions
 type OrderStatus = 'pending' | 'completed' | 'rejected';
 type ServiceType = 'followers' | 'likes' | 'views' | 'comments';
 
@@ -60,11 +60,12 @@ export const OrderDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);
+  const [isSendingToSupplier, setIsSendingToSupplier] = useState(false);
+  const [supplierResponse, setSupplierResponse] = useState<{success: boolean; message?: string}>(); 
   const navigate = useNavigate();
   const { toast } = useToast();
   const isMobile = useIsMobile();
 
-  // Service type icons and colors
   const serviceDetails = {
     followers: { icon: <Instagram size={20} />, color: 'text-blue-500', bg: 'bg-blue-50' },
     likes: { icon: <Heart size={20} />, color: 'text-red-500', bg: 'bg-red-50' },
@@ -72,20 +73,16 @@ export const OrderDetail = () => {
     comments: { icon: <MessageCircle size={20} />, color: 'text-green-500', bg: 'bg-green-50' }
   };
   
-  // Status badge variants
   const statusVariants = {
     pending: 'bg-yellow-100 text-yellow-800',
     completed: 'bg-green-100 text-green-800',
     rejected: 'bg-red-100 text-red-800'
   };
   
-  // Mock data for a single order
   useEffect(() => {
-    // Simulate API call to fetch order details
     setIsLoading(true);
     
     setTimeout(() => {
-      // Create a mock order
       const mockOrder: Order = {
         id: orderId || `ORD-${Math.floor(Math.random() * 10000)}`,
         username: `user_${Math.floor(Math.random() * 1000)}`,
@@ -112,7 +109,6 @@ export const OrderDetail = () => {
     
     setIsProcessing(true);
     
-    // Simulate API call to approve order
     setTimeout(() => {
       setOrder({ ...order, status: 'completed' });
       setIsProcessing(false);
@@ -131,7 +127,6 @@ export const OrderDetail = () => {
     setIsProcessing(true);
     setIsRejectDialogOpen(false);
     
-    // Simulate API call to reject order
     setTimeout(() => {
       setOrder({ ...order, status: 'rejected' });
       setIsProcessing(false);
@@ -142,6 +137,49 @@ export const OrderDetail = () => {
         variant: "destructive",
       });
     }, 1500);
+  };
+
+  const handleSendToSupplier = async () => {
+    if (!order) return;
+    
+    setIsSendingToSupplier(true);
+    
+    try {
+      const { SupplierService } = await import('@/services/supplier-service');
+      
+      const supplierOrderData = {
+        orderId: order.id,
+        serviceType: order.serviceType,
+        quantity: order.quantity,
+        target: order.serviceType === 'followers' ? order.instagramHandle : order.postUrl || order.instagramHandle,
+        customerEmail: order.customerEmail
+      };
+      
+      const result = await SupplierService.sendOrderToSupplier(supplierOrderData);
+      
+      setSupplierResponse({
+        success: result.success,
+        message: result.success 
+          ? `Order sent to supplier successfully. Reference: ${result.reference}` 
+          : result.message || 'Failed to send order to supplier'
+      });
+      
+      if (result.success) {
+        toast.success("Order sent to supplier successfully");
+      } else {
+        toast.error("Failed to send order to supplier");
+      }
+      
+    } catch (error) {
+      console.error('Error sending order to supplier:', error);
+      setSupplierResponse({
+        success: false,
+        message: 'An error occurred while sending the order to the supplier'
+      });
+      toast.error("Error sending order to supplier");
+    } finally {
+      setIsSendingToSupplier(false);
+    }
   };
 
   if (isLoading) {
@@ -199,7 +237,7 @@ export const OrderDetail = () => {
                   <Button 
                     variant="destructive" 
                     className="w-full sm:w-auto"
-                    disabled={isProcessing}
+                    disabled={isProcessing || isSendingToSupplier}
                   >
                     <X size={16} className="mr-2" />
                     Reject Order
@@ -224,7 +262,7 @@ export const OrderDetail = () => {
               <Button 
                 className="w-full sm:w-auto"
                 onClick={handleApprove}
-                disabled={isProcessing}
+                disabled={isProcessing || isSendingToSupplier}
               >
                 {isProcessing ? (
                   <>
@@ -247,7 +285,7 @@ export const OrderDetail = () => {
                 <Button 
                   variant="outline" 
                   className="w-full sm:w-auto"
-                  disabled={isProcessing}
+                  disabled={isProcessing || isSendingToSupplier}
                 >
                   <X size={16} className="mr-2" />
                   Mark as Rejected
@@ -276,7 +314,7 @@ export const OrderDetail = () => {
                 <Button 
                   variant="outline" 
                   className="w-full sm:w-auto"
-                  disabled={isProcessing}
+                  disabled={isProcessing || isSendingToSupplier}
                 >
                   <Check size={16} className="mr-2" />
                   Mark as Completed
@@ -297,6 +335,26 @@ export const OrderDetail = () => {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+          )}
+
+          {order.status === 'completed' && (
+            <Button 
+              onClick={handleSendToSupplier}
+              disabled={isSendingToSupplier}
+              className="w-full sm:w-auto"
+            >
+              {isSendingToSupplier ? (
+                <>
+                  <Loader2 size={16} className="mr-2 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <Send size={16} className="mr-2" />
+                  Send to Supplier
+                </>
+              )}
+            </Button>
           )}
         </div>
       </div>
@@ -321,6 +379,19 @@ export const OrderDetail = () => {
                 {order.status}
               </Badge>
             </div>
+            
+            {supplierResponse && (
+              <div className={`mb-6 p-4 rounded-md ${supplierResponse.success ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300' : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
+                <div className="flex items-center gap-2">
+                  {supplierResponse.success ? (
+                    <CheckCircle size={18} />
+                  ) : (
+                    <AlertTriangle size={18} />
+                  )}
+                  <p>{supplierResponse.message}</p>
+                </div>
+              </div>
+            )}
             
             <div className="space-y-6">
               <div>

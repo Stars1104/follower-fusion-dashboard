@@ -20,7 +20,7 @@ const SidebarItem = ({
   to, 
   isOpen = true,
   badge,
-  badgeColor = 'bg-primary'
+  badgeColor = 'bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground'
 }: SidebarItemProps) => {
   return (
     <NavLink
