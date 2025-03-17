@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthGuard } from "./components/AuthGuard";
 import AdminLayout from "./components/AdminLayout";
-import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Orders from "./pages/Orders";
@@ -25,7 +24,6 @@ const App = () => (
           <Routes>
             <Route path="/login" element={<Login />} />
             
-            {/* Admin routes */}
             <Route path="/dashboard" element={
               <AdminLayout>
                 <Dashboard />
@@ -47,14 +45,12 @@ const App = () => (
               </AdminLayout>
             } />
             
-            {/* Map the root to Dashboard for simplicity */}
             <Route path="/" element={
               <AdminLayout>
                 <Dashboard />
               </AdminLayout>
             } />
             
-            {/* Fallback route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthGuard>

@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { X, User, Bell, ArrowRight } from "lucide-react";
+import { X, Bell, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 

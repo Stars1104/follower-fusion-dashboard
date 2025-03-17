@@ -2,14 +2,11 @@
 import { useState, useEffect, ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-// Mock auth service - in a real app, you would use a proper auth implementation
-// This would be replaced with real authentication logic
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate checking login status
     const checkAuth = () => {
       const token = localStorage.getItem('admin_token');
       setIsAuthenticated(!!token);
@@ -21,9 +18,7 @@ const useAuth = () => {
 
   const login = (email: string, password: string): Promise<boolean> => {
     return new Promise((resolve) => {
-      // This is a mock - in a real app, you would validate credentials against a server
       setTimeout(() => {
-        // Allow both the original password and "12345678"
         if (email === 'admin@example.com' && (password === 'password' || password === '12345678')) {
           localStorage.setItem('admin_token', 'mock-jwt-token');
           setIsAuthenticated(true);

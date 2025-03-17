@@ -39,7 +39,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     } else if (path.includes('settings')) {
       setPageTitle('Settings');
     } else {
-      setPageTitle('Instagram Growth Admin');
+      setPageTitle('Instagram ');
     }
   }, [location]);
 

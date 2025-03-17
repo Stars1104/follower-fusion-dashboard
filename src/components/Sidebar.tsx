@@ -1,9 +1,10 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, Settings, Instagram, Heart, Eye, MessageCircle, TrendingUp, Wallet } from 'lucide-react';
+import { LayoutDashboard, Package, Settings, Heart, Eye, MessageCircle, TrendingUp, Wallet } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { FaInstagram } from "react-icons/fa";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -48,8 +49,8 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             transition={{ duration: 0.3 }}
             className="flex items-center overflow-hidden"
           >
-            <Instagram className="text-primary" size={28} />
-            <span className="ml-2 font-semibold text-xl">Growth Admin</span>
+            <FaInstagram className="text-primary" size={28} />
+            <span className="ml-2 font-semibold text-xl">LikesIO Admin</span>
           </motion.div>
           {!isOpen && (
             <motion.div
@@ -57,7 +58,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3, delay: 0.2 }}
             >
-              <Instagram className="text-primary" size={28} />
+              <FaInstagram className="text-primary" size={28} />
             </motion.div>
           )}
         </div>
@@ -73,7 +74,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
               <p className="text-xs uppercase font-medium text-sidebar-foreground/60 mb-2 px-3">Services</p>
               <ServiceNavItem 
                 to="/orders?type=followers" 
-                icon={<Instagram size={16} />} 
+                icon={<FaInstagram size={16} />} 
                 label="Followers" 
                 color="blue"
               />
@@ -101,7 +102,6 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <NavItem to="/analytics" icon={<TrendingUp size={20} />} label="Analytics" isOpen={isOpen} />
           <NavItem to="/settings" icon={<Settings size={20} />} label="Settings" isOpen={isOpen} />
           
-          {/* Balance section for collapsed sidebar */}
           {!isOpen && (
             <div className="mt-6 flex justify-center">
               <div className="p-2 rounded-md bg-primary/10">
@@ -110,7 +110,6 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             </div>
           )}
           
-          {/* Balance section for expanded sidebar */}
           {isOpen && (
             <div className="mt-6 p-4 bg-primary/5 rounded-md border border-primary/10">
               <div className="flex items-center gap-2 mb-2">
