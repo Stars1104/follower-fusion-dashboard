@@ -38,7 +38,7 @@ const Login = () => {
       });
     } finally {
       setIsLoading(false);
-      window.location.href = "/dashboard";
+      window.location.href = "/";
     }
   };
 
