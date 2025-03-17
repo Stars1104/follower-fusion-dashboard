@@ -11,52 +11,55 @@ import Dashboard from "./pages/Dashboard";
 import Orders from "./pages/Orders";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner position="bottom-right" />
-      <BrowserRouter>
-        <AuthGuard>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            
-            <Route path="/dashboard" element={
-              <AdminLayout>
-                <Dashboard />
-              </AdminLayout>
-            } />
-            <Route path="/orders" element={
-              <AdminLayout>
-                <Orders />
-              </AdminLayout>
-            } />
-            <Route path="/orders/:orderId" element={
-              <AdminLayout>
-                <Orders />
-              </AdminLayout>
-            } />
-            <Route path="/settings" element={
-              <AdminLayout>
-                <Settings />
-              </AdminLayout>
-            } />
-            
-            <Route path="/" element={
-              <AdminLayout>
-                <Dashboard />
-              </AdminLayout>
-            } />
-            
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthGuard>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ThemeProvider defaultTheme="system">
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner position="bottom-right" />
+        <BrowserRouter>
+          <AuthGuard>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              
+              <Route path="/dashboard" element={
+                <AdminLayout>
+                  <Dashboard />
+                </AdminLayout>
+              } />
+              <Route path="/orders" element={
+                <AdminLayout>
+                  <Orders />
+                </AdminLayout>
+              } />
+              <Route path="/orders/:orderId" element={
+                <AdminLayout>
+                  <Orders />
+                </AdminLayout>
+              } />
+              <Route path="/settings" element={
+                <AdminLayout>
+                  <Settings />
+                </AdminLayout>
+              } />
+              
+              <Route path="/" element={
+                <AdminLayout>
+                  <Dashboard />
+                </AdminLayout>
+              } />
+              
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AuthGuard>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
 );
 
 export default App;

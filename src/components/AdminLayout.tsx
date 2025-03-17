@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 import { Bell, User, Wallet } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { NotificationPanel } from './NotificationPanel';
+import { ThemeToggle } from './ThemeToggle';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -94,6 +95,9 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               <Wallet size={16} className="text-primary" />
               <span className="text-sm font-medium">$25,000</span>
             </div>
+            
+            {/* Theme Toggle */}
+            <ThemeToggle />
             
             <button 
               className="p-2 rounded-full hover:bg-secondary transition-colors relative"
