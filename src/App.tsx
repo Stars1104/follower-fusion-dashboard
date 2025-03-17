@@ -8,14 +8,14 @@ import { AuthGuard } from "./components/AuthGuard";
 import AdminLayout from "./components/AdminLayout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-// import Orders from "./pages/Orders";
-// import Settings from "./pages/Settings";
-// import Pricing from "./pages/Pricing";
+import Orders from "./pages/Orders";
+import Settings from "./pages/Settings";
+import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "./components/ThemeProvider";
-// import Users from "./pages/Users";
-// import ContentEditor from "./pages/ContentEditor";
-// import SupplierSettings from "./pages/SupplierSettings";
+import Users from "./pages/Users";
+import ContentEditor from "./pages/ContentEditor";
+import SupplierSettings from "./pages/SupplierSettings";
 
 const queryClient = new QueryClient();
 
@@ -30,7 +30,7 @@ const App = () => (
             <Routes>
               <Route path="/login" element={<Login />} />
               
-              {/* <Route path="/dashboard" element={
+              <Route path="/dashboard" element={
                 <AdminLayout>
                   <Dashboard />
                 </AdminLayout>
@@ -69,7 +69,7 @@ const App = () => (
                 <AdminLayout>
                   <SupplierSettings />
                 </AdminLayout>
-              } /> */}
+              } />
               
               <Route path="/" element={
                 <AdminLayout>
