@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
@@ -165,9 +166,17 @@ export const OrderDetail = () => {
       });
       
       if (result.success) {
-        toast.success("Order sent to supplier successfully");
+        toast({
+          title: "Success",
+          description: "Order sent to supplier successfully",
+          variant: "default",
+        });
       } else {
-        toast.error("Failed to send order to supplier");
+        toast({
+          title: "Error",
+          description: "Failed to send order to supplier",
+          variant: "destructive",
+        });
       }
       
     } catch (error) {
@@ -176,7 +185,11 @@ export const OrderDetail = () => {
         success: false,
         message: 'An error occurred while sending the order to the supplier'
       });
-      toast.error("Error sending order to supplier");
+      toast({
+        title: "Error",
+        description: "Error sending order to supplier",
+        variant: "destructive",
+      });
     } finally {
       setIsSendingToSupplier(false);
     }

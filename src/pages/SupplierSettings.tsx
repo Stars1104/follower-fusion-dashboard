@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { SupplierService, SupplierOrderRequest, SupplierOrderResponse } from '@/services/supplier-service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -93,7 +92,15 @@ const SupplierSettings = () => {
     setTestResult(null);
     
     try {
-      const result = await SupplierService.sendOrderToSupplier(data);
+      const supplierOrderData: SupplierOrderRequest = {
+        orderId: data.orderId,
+        serviceType: data.serviceType,
+        quantity: data.quantity,
+        target: data.target,
+        customerEmail: data.customerEmail
+      };
+      
+      const result = await SupplierService.sendOrderToSupplier(supplierOrderData);
       setTestResult(result);
       
       if (result.success) {
