@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Plus, Save, X } from 'lucide-react';
+import { EggFried, Loader2, Plus, Save, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -55,7 +55,6 @@ const ContentEditor = () => {
         setIsLoading(false);
       }
     };
-
     fetchContent();
   }, []);
 

@@ -24,4 +24,7 @@ export default defineConfig(({ mode }) => ({
       external: ["zod"], // Ensure it's not bundled incorrectly
     },
   },
+  optimizeDeps: {
+    include: ["zod"],
+  },
 }));
