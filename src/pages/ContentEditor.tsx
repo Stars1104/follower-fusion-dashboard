@@ -11,7 +11,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Loader2, Plus, Save, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 const contentSchema = z.object({
@@ -30,7 +30,7 @@ const ContentEditor = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [currentFeature, setCurrentFeature] = useState('');
-  
+
   const form = useForm<ContentFormValues>({
     resolver: zodResolver(contentSchema),
     defaultValues: {
@@ -76,7 +76,7 @@ const ContentEditor = () => {
 
   const handleAddFeature = () => {
     if (!currentFeature.trim()) return;
-    
+
     const currentFeatures = form.getValues('features') || [];
     form.setValue('features', [...currentFeatures, currentFeature.trim()]);
     setCurrentFeature('');
@@ -89,10 +89,10 @@ const ContentEditor = () => {
 
   const onSubmit = async (data: ContentFormValues) => {
     setIsSaving(true);
-    
+
     try {
       const currentContent = contents.find(content => content.pageId === selectedPage);
-      
+
       if (currentContent) {
         // Update existing content
         const updatedContent = await ContentService.updateContent({
@@ -102,7 +102,7 @@ const ContentEditor = () => {
           description: data.description,
           features: data.features,
         });
-        
+
         setContents(prev => prev.map(c => c.id === updatedContent.id ? updatedContent : c));
         toast.success('Content updated successfully');
       } else {
@@ -114,11 +114,11 @@ const ContentEditor = () => {
           description: data.description,
           features: data.features,
         });
-        
+
         setContents(prev => [...prev, newContent]);
         toast.success('New content created successfully');
       }
-      
+
       setIsEditing(false);
     } catch (error) {
       console.error('Error saving content:', error);
@@ -136,7 +136,7 @@ const ContentEditor = () => {
           Edit your website's content for different services
         </p>
       </div>
-      
+
       <Tabs defaultValue="followers" value={selectedPage} onValueChange={setSelectedPage}>
         <TabsList className="mb-6">
           <TabsTrigger value="followers">Followers</TabsTrigger>
@@ -144,7 +144,7 @@ const ContentEditor = () => {
           <TabsTrigger value="views">Views</TabsTrigger>
           <TabsTrigger value="comments">Comments</TabsTrigger>
         </TabsList>
-        
+
         {isLoading ? (
           <div className="flex justify-center items-center h-60">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -160,7 +160,7 @@ const ContentEditor = () => {
                   Manage content for your {selectedPage} service
                 </CardDescription>
               </div>
-              
+
               {!isEditing ? (
                 <Button onClick={() => setIsEditing(true)}>
                   Edit Content
@@ -182,7 +182,7 @@ const ContentEditor = () => {
                 </Button>
               )}
             </CardHeader>
-            
+
             <CardContent className="pt-6">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -193,9 +193,9 @@ const ContentEditor = () => {
                       <FormItem>
                         <FormLabel>Title</FormLabel>
                         <FormControl>
-                          <Input 
-                            {...field} 
-                            disabled={!isEditing} 
+                          <Input
+                            {...field}
+                            disabled={!isEditing}
                             className={!isEditing ? "bg-muted" : ""}
                           />
                         </FormControl>
@@ -203,7 +203,7 @@ const ContentEditor = () => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="subtitle"
@@ -211,9 +211,9 @@ const ContentEditor = () => {
                       <FormItem>
                         <FormLabel>Subtitle</FormLabel>
                         <FormControl>
-                          <Input 
-                            {...field} 
-                            disabled={!isEditing} 
+                          <Input
+                            {...field}
+                            disabled={!isEditing}
                             className={!isEditing ? "bg-muted" : ""}
                           />
                         </FormControl>
@@ -221,7 +221,7 @@ const ContentEditor = () => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="description"
@@ -229,10 +229,10 @@ const ContentEditor = () => {
                       <FormItem>
                         <FormLabel>Description</FormLabel>
                         <FormControl>
-                          <Textarea 
-                            {...field} 
+                          <Textarea
+                            {...field}
                             rows={5}
-                            disabled={!isEditing} 
+                            disabled={!isEditing}
                             className={!isEditing ? "bg-muted" : ""}
                           />
                         </FormControl>
@@ -240,10 +240,10 @@ const ContentEditor = () => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <div>
                     <Label>Features</Label>
-                    
+
                     {isEditing && (
                       <div className="flex mt-2 mb-4 gap-2">
                         <Input
@@ -258,7 +258,7 @@ const ContentEditor = () => {
                         </Button>
                       </div>
                     )}
-                    
+
                     <div className="mt-2 space-y-2">
                       {form.watch('features')?.length === 0 ? (
                         <p className="text-muted-foreground text-sm italic">No features added yet</p>
@@ -281,7 +281,7 @@ const ContentEditor = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   {isEditing && (
                     <div className="flex justify-end">
                       <Button type="submit" className="w-full sm:w-auto" disabled={isSaving}>
@@ -302,7 +302,7 @@ const ContentEditor = () => {
                 </form>
               </Form>
             </CardContent>
-            
+
             {!isEditing && contents.find(c => c.pageId === selectedPage)?.lastUpdated && (
               <CardFooter className="border-t px-6 py-4">
                 <p className="text-sm text-muted-foreground">
