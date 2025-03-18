@@ -283,7 +283,7 @@ const Settings = () => {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="analytics-period">Default Time Period</Label>
-                <select id="analytics-period" className="w-full p-2 border rounded">
+                <select id="analytics-period" className="w-full p-2 border rounded text-black">
                   <option value="7d">Last 7 days</option>
                   <option value="30d">Last 30 days</option>
                   <option value="3m">Last 3 months</option>

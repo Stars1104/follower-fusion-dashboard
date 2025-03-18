@@ -260,7 +260,7 @@ const SupplierSettings = () => {
                           <FormControl>
                             <select 
                               {...field} 
-                              className="w-full p-2 border rounded"
+                              className="w-full p-2 border rounded text-black"
                             >
                               <option value="followers">Followers</option>
                               <option value="likes">Likes</option>

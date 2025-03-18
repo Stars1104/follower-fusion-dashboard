@@ -130,9 +130,9 @@ export const PerformanceGraph = () => {
               {timeRanges.map((range) => (
                 <button
                   key={range.value}
-                  className={`px-2 md:px-3 py-1 text-xs md:text-sm rounded-md transition-colors ${
+                  className={`px-2 md:px-3 py-1 text-xs md:text-sm rounded-md transition-colors text-black ${
                     selectedRange === range.value
-                      ? 'bg-white shadow-sm text-foreground'
+                      ? 'bg-white shadow-sm text-black'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                   onClick={() => handleRangeChange(range.value)}

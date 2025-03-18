@@ -2,9 +2,10 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, Settings, Heart, Eye, MessageCircle, TrendingUp, Wallet } from 'lucide-react';
+import { LayoutDashboard, Package, Settings, Heart, Eye, MessageCircle, Wallet, Coins, User, Edit } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { FaInstagram } from "react-icons/fa";
+
 
 interface SidebarProps {
   isOpen: boolean;
@@ -14,7 +15,7 @@ interface SidebarProps {
 export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const isMobile = useIsMobile();
   const location = useLocation();
-  
+
   // Close sidebar when navigating on mobile
   useEffect(() => {
     if (isMobile) {
@@ -26,17 +27,17 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     <>
       {/* Overlay for mobile */}
       {isMobile && isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-10"
           onClick={() => setIsOpen(false)}
         />
       )}
-      
+
       <motion.aside
         initial={{ width: isOpen ? 256 : 80, x: 0 }}
-        animate={{ 
-          width: isOpen ? 256 : 80, 
-          x: isMobile && !isOpen ? -80 : 0 
+        animate={{
+          width: isOpen ? 256 : 80,
+          x: isMobile && !isOpen ? -80 : 0
         }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className="bg-sidebar text-sidebar-foreground border-r border-sidebar-border fixed top-0 left-0 h-full z-20"
@@ -67,41 +68,46 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
         <nav className="p-4">
           <NavItem to="/dashboard" icon={<LayoutDashboard size={20} />} label="Dashboard" isOpen={isOpen} />
           <NavItem to="/orders" icon={<Package size={20} />} label="Orders" isOpen={isOpen} />
-          
+
+
           {/* Service types group - only visible when sidebar is open */}
           {isOpen && (
             <div className="mt-6 mb-4">
               <p className="text-xs uppercase font-medium text-sidebar-foreground/60 mb-2 px-3">Services</p>
-              <ServiceNavItem 
-                to="/orders?type=followers" 
-                icon={<FaInstagram size={16} />} 
-                label="Followers" 
+              <ServiceNavItem
+                to="/orders?type=followers"
+                icon={<FaInstagram size={16} />}
+                label="Followers"
                 color="blue"
               />
-              <ServiceNavItem 
-                to="/orders?type=likes" 
-                icon={<Heart size={16} />} 
-                label="Likes" 
+              <ServiceNavItem
+                to="/orders?type=likes"
+                icon={<Heart size={16} />}
+                label="Likes"
                 color="red"
               />
-              <ServiceNavItem 
-                to="/orders?type=views" 
-                icon={<Eye size={16} />} 
-                label="Views" 
+              <ServiceNavItem
+                to="/orders?type=views"
+                icon={<Eye size={16} />}
+                label="Views"
                 color="purple"
               />
-              <ServiceNavItem 
-                to="/orders?type=comments" 
-                icon={<MessageCircle size={16} />} 
-                label="Comments" 
+              <ServiceNavItem
+                to="/orders?type=comments"
+                icon={<MessageCircle size={16} />}
+                label="Comments"
                 color="green"
               />
             </div>
           )}
 
-          <NavItem to="/analytics" icon={<TrendingUp size={20} />} label="Analytics" isOpen={isOpen} />
+          <NavItem to="/pricing" icon={<Coins size={20} />} label="Price" isOpen={isOpen} />
+          <NavItem to="/users" icon={<User size={20} />} label="User List" isOpen={isOpen} />
+          <NavItem to="/content" icon={<Edit size={20} />} label="Content Editor" isOpen={isOpen} />
+          <NavItem to="/supplier" icon={<Settings size={20} />} label="Supplier Setting" isOpen={isOpen} />
+
           <NavItem to="/settings" icon={<Settings size={20} />} label="Settings" isOpen={isOpen} />
-          
+
           {!isOpen && (
             <div className="mt-6 flex justify-center">
               <div className="p-2 rounded-md bg-primary/10">
@@ -109,7 +115,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
               </div>
             </div>
           )}
-          
+
           {isOpen && (
             <div className="mt-6 p-4 bg-primary/5 rounded-md border border-primary/10">
               <div className="flex items-center gap-2 mb-2">
@@ -139,8 +145,8 @@ const NavItem = ({ to, icon, label, isOpen }: NavItemProps) => {
       to={to}
       className={({ isActive }) => `
         flex items-center p-3 rounded-md mb-1 transition-all
-        ${isActive 
-          ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium' 
+        ${isActive
+          ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium'
           : 'hover:bg-sidebar-accent/50 text-sidebar-foreground'
         }
       `}
@@ -181,8 +187,8 @@ const ServiceNavItem = ({ to, icon, label, color }: ServiceNavItemProps) => {
       to={to}
       className={({ isActive }) => `
         flex items-center p-2 rounded-md mb-1 ml-6
-        ${isActive 
-          ? `${colorVariants[color]} font-medium` 
+        ${isActive
+          ? `${colorVariants[color]} font-medium`
           : `hover:bg-sidebar-accent/50 text-sidebar-foreground/80`
         }
       `}
