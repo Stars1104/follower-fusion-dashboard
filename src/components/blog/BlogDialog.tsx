@@ -101,9 +101,16 @@ export function BlogDialog({ open, onOpenChange, categories, post, onSave }: Blo
   }, [post, form, open]);
 
   const onSubmit = (values: BlogFormValues) => {
+    // Here's the fix: Ensure all required properties are populated explicitly
     onSave({
       id: post?.id ?? '',
-      ...values,
+      title: values.title,
+      slug: values.slug,
+      excerpt: values.excerpt,
+      content: values.content,
+      imageUrl: values.imageUrl,
+      categoryId: values.categoryId,
+      published: values.published,
       createdAt: post?.createdAt ?? new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
