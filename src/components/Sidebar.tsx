@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, Settings, Heart, Eye, MessageCircle, Wallet, Coins, User, Edit } from 'lucide-react';
+import { LayoutDashboard, Package, Settings, Heart, Eye, MessageCircle, Wallet, Coins, User, Edit, FileText, Tag, Star } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { FaInstagram } from "react-icons/fa";
 
@@ -69,7 +69,6 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <NavItem to="/dashboard" icon={<LayoutDashboard size={20} />} label="Dashboard" isOpen={isOpen} />
           <NavItem to="/orders" icon={<Package size={20} />} label="Orders" isOpen={isOpen} />
 
-
           {/* Service types group - only visible when sidebar is open */}
           {isOpen && (
             <div className="mt-6 mb-4">
@@ -105,6 +104,11 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <NavItem to="/users" icon={<User size={20} />} label="User List" isOpen={isOpen} />
           <NavItem to="/content" icon={<Edit size={20} />} label="Content Editor" isOpen={isOpen} />
           <NavItem to="/supplier" icon={<Settings size={20} />} label="Supplier Setting" isOpen={isOpen} />
+          
+          {/* New menu items */}
+          <NavItem to="/blog" icon={<FileText size={20} />} label="Blog" isOpen={isOpen} />
+          <NavItem to="/coupons" icon={<Tag size={20} />} label="Coupons" isOpen={isOpen} />
+          <NavItem to="/reviews" icon={<Star size={20} />} label="Reviews" isOpen={isOpen} />
 
           <NavItem to="/settings" icon={<Settings size={20} />} label="Settings" isOpen={isOpen} />
 

@@ -16,6 +16,10 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import Users from "./pages/Users";
 import ContentEditor from "./pages/ContentEditor";
 import SupplierSettings from "./pages/SupplierSettings";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import Coupons from "./pages/Coupons";
+import Reviews from "./pages/Reviews";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +72,28 @@ const App = () => (
               <Route path="/supplier" element={
                 <AdminLayout>
                   <SupplierSettings />
+                </AdminLayout>
+              } />
+              
+              {/* New routes */}
+              <Route path="/blog" element={
+                <AdminLayout>
+                  <Blog />
+                </AdminLayout>
+              } />
+              <Route path="/blog/:postId" element={
+                <AdminLayout>
+                  <BlogPost />
+                </AdminLayout>
+              } />
+              <Route path="/coupons" element={
+                <AdminLayout>
+                  <Coupons />
+                </AdminLayout>
+              } />
+              <Route path="/reviews" element={
+                <AdminLayout>
+                  <Reviews />
                 </AdminLayout>
               } />
               

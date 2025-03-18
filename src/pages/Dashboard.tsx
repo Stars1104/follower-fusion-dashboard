@@ -4,7 +4,7 @@ import { PerformanceGraph } from '@/components/analytics/PerformanceGraph';
 import { AnalyticsCard } from '@/components/analytics/AnalyticsCard';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, DollarSign, TrendingUp, CreditCard, ShoppingBag, Map } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import {
   Table,
@@ -16,6 +16,9 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useBreakpoint } from '@/hooks/use-mobile';
+import RevenueMetrics from '@/components/analytics/RevenueMetrics';
+import SalesConversion from '@/components/analytics/SalesConversion';
+import CountryMap from '@/components/analytics/CountryMap';
 
 // Mock recent orders data
 const recentOrders = [
@@ -40,6 +43,9 @@ const Dashboard = () => {
   
   return (
     <div className="space-y-8">
+      {/* Revenue Overview */}
+      <RevenueMetrics />
+      
       {/* Metrics Row */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
         <MetricCard
@@ -71,6 +77,9 @@ const Dashboard = () => {
           delay={0.4}
         />
       </div>
+      
+      {/* Sales Conversion Metrics */}
+      <SalesConversion />
       
       {/* Performance Graph */}
       <PerformanceGraph />
@@ -207,6 +216,9 @@ const Dashboard = () => {
           </div>
         </AnalyticsCard>
       </div>
+      
+      {/* Geographic Distribution */}
+      <CountryMap />
     </div>
   );
 };
