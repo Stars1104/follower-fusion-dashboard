@@ -2,6 +2,7 @@
 import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { Map } from 'lucide-react';
+import WorldMap from './WorldMap';
 
 // Mock data for top countries
 const topCountries = [
@@ -29,11 +30,8 @@ const CountryMap = () => {
         </div>
         
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-muted/30 rounded-lg p-6 flex items-center justify-center">
-            <div className="text-center text-muted-foreground">
-              <p className="mb-2">World map visualization would go here</p>
-              <p className="text-sm">This would be a visual map showing customer distribution</p>
-            </div>
+          <div className="bg-muted/30 rounded-lg overflow-hidden h-[300px]">
+            <WorldMap data={topCountries} />
           </div>
           
           <div>
