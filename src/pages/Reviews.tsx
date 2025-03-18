@@ -78,7 +78,7 @@ const mockReviews: Review[] = [
     customerName: 'James Wilson',
     serviceType: 'views',
     rating: 3,
-    review: 'The views came in quickly, but I didn't notice much of an impact on my other engagement metrics. Good service but not exceptional.',
+    review: "The views came in quickly, but I didn't notice much of an impact on my other engagement metrics. Good service but not exceptional.",
     date: '2023-04-18T16:20:00Z',
     featured: false,
     verified: false
