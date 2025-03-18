@@ -1,6 +1,6 @@
 
 import { Order } from './types';
-import { ServiceType, OrderStatus } from '@/components/orders/detail/types';
+import { ServiceType, OrderStatus } from './types';
 
 // Generate mock data
 export const generateOrders = (count: number): Order[] => {

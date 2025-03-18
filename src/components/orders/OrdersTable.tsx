@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/card';
 import { Instagram, Heart, Eye, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Order, OrderStatus, ServiceType } from '@/components/orders/detail/types';
+import { Order, OrderStatus, ServiceType } from './types';
 import { OrderRow } from './OrderRow';
 import { SearchFilterBar } from './SearchFilterBar';
 import { TablePagination } from './TablePagination';
@@ -53,7 +53,8 @@ export const OrdersTable = () => {
     // Simulate API call to fetch orders
     setIsLoading(true);
     setTimeout(() => {
-      const generatedOrders = generateOrders(45); // Generate more orders for pagination
+      // Use the mockData generator which returns the correct type
+      const generatedOrders = generateOrders(45); 
       setAllOrders(generatedOrders);
       setIsLoading(false);
     }, 1000);
