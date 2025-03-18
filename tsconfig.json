@@ -9,7 +9,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "moduleResolution": "Node",
     "noImplicitAny": false,
     "noUnusedParameters": false,
     "skipLibCheck": true,
