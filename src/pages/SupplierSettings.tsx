@@ -6,19 +6,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Loader2, 
-  Save, 
-  Send, 
-  ArrowRight, 
-  CheckCircle, 
-  AlertCircle, 
-  ShieldCheck, 
+import {
+  Loader2,
+  Save,
+  Send,
+  ArrowRight,
+  CheckCircle,
+  AlertCircle,
+  ShieldCheck,
   Link as LinkIcon
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -45,7 +45,7 @@ const SupplierSettings = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isTestingOrder, setIsTestingOrder] = useState(false);
   const [testResult, setTestResult] = useState<SupplierOrderResponse | null>(null);
-  
+
   const apiSettingsForm = useForm<ApiSettingsFormValues>({
     resolver: zodResolver(apiSettingsSchema),
     defaultValues: {
@@ -67,10 +67,10 @@ const SupplierSettings = () => {
 
   const onSubmitApiSettings = async (data: ApiSettingsFormValues) => {
     setIsConnecting(true);
-    
+
     try {
       const success = await SupplierService.configureApiSettings(data.apiKey, data.apiEndpoint);
-      
+
       if (success) {
         toast.success('API settings saved successfully');
         setIsConnected(true);
@@ -90,7 +90,7 @@ const SupplierSettings = () => {
   const onSubmitTestOrder = async (data: TestOrderFormValues) => {
     setIsTestingOrder(true);
     setTestResult(null);
-    
+
     try {
       const supplierOrderData: SupplierOrderRequest = {
         orderId: data.orderId,
@@ -99,10 +99,10 @@ const SupplierSettings = () => {
         target: data.target,
         customerEmail: data.customerEmail
       };
-      
+
       const result = await SupplierService.sendOrderToSupplier(supplierOrderData);
       setTestResult(result);
-      
+
       if (result.success) {
         toast.success('Test order sent successfully');
       } else {
@@ -124,13 +124,13 @@ const SupplierSettings = () => {
           Connect to your supplier's API to automatically fulfill orders
         </p>
       </div>
-      
+
       <Tabs defaultValue="settings">
         <TabsList className="mb-6">
           <TabsTrigger value="settings">API Settings</TabsTrigger>
           <TabsTrigger value="test">Test API</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="settings">
           <div className="grid gap-6 md:grid-cols-2">
             <Card className="md:col-span-2">
@@ -140,7 +140,7 @@ const SupplierSettings = () => {
                   Set up your connection to the supplier panel API
                 </CardDescription>
               </CardHeader>
-              
+
               <CardContent>
                 <Form {...apiSettingsForm}>
                   <form onSubmit={apiSettingsForm.handleSubmit(onSubmitApiSettings)} className="space-y-6">
@@ -152,7 +152,7 @@ const SupplierSettings = () => {
                         In a production environment, these should be stored on your secure server.
                       </AlertDescription>
                     </Alert>
-                    
+
                     <FormField
                       control={apiSettingsForm.control}
                       name="apiKey"
@@ -160,8 +160,8 @@ const SupplierSettings = () => {
                         <FormItem>
                           <FormLabel>API Key</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               type="password"
                               placeholder="Enter your supplier API key"
                             />
@@ -170,7 +170,7 @@ const SupplierSettings = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={apiSettingsForm.control}
                       name="apiEndpoint"
@@ -178,8 +178,8 @@ const SupplierSettings = () => {
                         <FormItem>
                           <FormLabel>API Endpoint</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               placeholder="https://api.example.com"
                             />
                           </FormControl>
@@ -187,7 +187,7 @@ const SupplierSettings = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <div className="flex justify-end">
                       <Button type="submit" className="w-full sm:w-auto" disabled={isConnecting}>
                         {isConnecting ? (
@@ -206,7 +206,7 @@ const SupplierSettings = () => {
                   </form>
                 </Form>
               </CardContent>
-              
+
               {isConnected && (
                 <CardFooter className="border-t px-6 py-4 bg-green-50 dark:bg-green-900/20">
                   <div className="flex items-center gap-2">
@@ -220,7 +220,7 @@ const SupplierSettings = () => {
             </Card>
           </div>
         </TabsContent>
-        
+
         <TabsContent value="test">
           <div className="grid gap-6 md:grid-cols-2">
             <Card>
@@ -230,7 +230,7 @@ const SupplierSettings = () => {
                   Send a test order to verify your API connection
                 </CardDescription>
               </CardHeader>
-              
+
               <CardContent>
                 <Form {...testOrderForm}>
                   <form onSubmit={testOrderForm.handleSubmit(onSubmitTestOrder)} className="space-y-4">
@@ -241,8 +241,8 @@ const SupplierSettings = () => {
                         <FormItem>
                           <FormLabel>Order ID</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               placeholder="ORD-12345"
                             />
                           </FormControl>
@@ -250,7 +250,7 @@ const SupplierSettings = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={testOrderForm.control}
                       name="serviceType"
@@ -258,8 +258,8 @@ const SupplierSettings = () => {
                         <FormItem>
                           <FormLabel>Service Type</FormLabel>
                           <FormControl>
-                            <select 
-                              {...field} 
+                            <select
+                              {...field}
                               className="w-full p-2 border rounded text-black"
                             >
                               <option value="followers">Followers</option>
@@ -272,7 +272,7 @@ const SupplierSettings = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={testOrderForm.control}
                       name="quantity"
@@ -280,8 +280,8 @@ const SupplierSettings = () => {
                         <FormItem>
                           <FormLabel>Quantity</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               type="number"
                               min="1"
                             />
@@ -290,7 +290,7 @@ const SupplierSettings = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={testOrderForm.control}
                       name="target"
@@ -298,8 +298,8 @@ const SupplierSettings = () => {
                         <FormItem>
                           <FormLabel>Target (Instagram handle or post URL)</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               placeholder="username or https://instagram.com/p/example"
                             />
                           </FormControl>
@@ -307,7 +307,7 @@ const SupplierSettings = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={testOrderForm.control}
                       name="customerEmail"
@@ -315,8 +315,8 @@ const SupplierSettings = () => {
                         <FormItem>
                           <FormLabel>Customer Email (Optional)</FormLabel>
                           <FormControl>
-                            <Input 
-                              {...field} 
+                            <Input
+                              {...field}
                               placeholder="customer@example.com"
                             />
                           </FormControl>
@@ -324,7 +324,7 @@ const SupplierSettings = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <Button type="submit" className="w-full" disabled={isTestingOrder || !isConnected}>
                       {isTestingOrder ? (
                         <>
@@ -344,7 +344,7 @@ const SupplierSettings = () => {
                 </Form>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Test Results</CardTitle>
@@ -352,7 +352,7 @@ const SupplierSettings = () => {
                   View the response from the supplier API
                 </CardDescription>
               </CardHeader>
-              
+
               <CardContent>
                 {testResult ? (
                   <div className="space-y-4">
@@ -366,7 +366,7 @@ const SupplierSettings = () => {
                         {testResult.success ? 'Order Sent Successfully' : 'Order Failed'}
                       </h3>
                     </div>
-                    
+
                     {testResult.success && (
                       <>
                         <div>
@@ -375,14 +375,14 @@ const SupplierSettings = () => {
                             {testResult.reference}
                           </p>
                         </div>
-                        
+
                         <div>
                           <Label>Status</Label>
                           <p className="text-sm mt-1">
                             {testResult.status}
                           </p>
                         </div>
-                        
+
                         {testResult.estimatedCompletionTime && (
                           <div>
                             <Label>Estimated Completion</Label>
@@ -393,7 +393,7 @@ const SupplierSettings = () => {
                         )}
                       </>
                     )}
-                    
+
                     {testResult.message && (
                       <div>
                         <Label>Message</Label>
@@ -402,7 +402,7 @@ const SupplierSettings = () => {
                         </p>
                       </div>
                     )}
-                    
+
                     <div>
                       <Label>Raw Response</Label>
                       <pre className="text-xs mt-1 p-2 bg-secondary rounded overflow-auto max-h-40">
