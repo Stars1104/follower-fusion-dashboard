@@ -17,12 +17,12 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     setIsLoading(true);
-    
+
     try {
       const success = await login(email, password);
-      
+
       if (!success) {
         toast({
           title: "Login failed",
@@ -43,25 +43,25 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#030712] p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <Card className="p-6 md:p-8 shadow-lg border-0">
+        <Card className="p-6 md:p-8 shadow-lg border">
           <div className="text-center mb-6 md:mb-8">
             <div className="mb-4 inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-primary/10">
               <FaInstagram className="h-7 w-7 md:h-8 md:w-8 text-primary" />
             </div>
-            <h1 className="text-xl md:text-2xl font-semibold mb-1">LikesIO Admin</h1>
+            <h1 className="text-xl md:text-2xl font-semibold mb-1 text-muted-foreground">LikesIO Admin</h1>
             <p className="text-sm md:text-base text-muted-foreground">Sign in to access your dashboard</p>
           </div>
-          
+
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label htmlFor="email" className="text-sm font-medium  text-muted-foreground">
                 Email
               </label>
               <Input
@@ -74,10 +74,10 @@ const Login = () => {
                 className="h-10 md:h-11"
               />
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="text-sm font-medium">
+                <label htmlFor="password" className="text-sm font-medium  text-muted-foreground">
                   Password
                 </label>
                 <a href="#" className="text-xs md:text-sm text-primary hover:underline">
@@ -94,8 +94,8 @@ const Login = () => {
                 className="h-10 md:h-11"
               />
             </div>
-            
-            <Button type="submit" className="w-full h-10 md:h-11" disabled={isLoading}>
+
+            <Button type="submit" className="w-full h-10 md:h-11 mt-2" disabled={isLoading}>
               {isLoading ? (
                 <span className="animate-pulse">Signing in...</span>
               ) : (
