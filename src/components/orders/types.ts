@@ -1,6 +1,8 @@
 
 import { OrderStatus, ServiceType } from '@/components/orders/detail/types';
 
+export { OrderStatus, ServiceType };
+
 export interface Order {
   id: string;
   username: string;

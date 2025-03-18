@@ -43,7 +43,7 @@ export const SearchFilterBar = ({
         
         {typeFilter && (
           <Badge variant="outline" className="py-1.5">
-            <ServiceIcon type={typeFilter} size={16} />
+            <ServiceIcon serviceType={typeFilter} size={16} />
             <span className="ml-1 capitalize">{typeFilter}</span>
           </Badge>
         )}
